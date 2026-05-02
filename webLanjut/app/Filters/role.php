@@ -14,11 +14,11 @@ class role implements FilterInterface
             return redirect()->to(site_url('login'));
         }
         if (session()->get('role') == 'admin'){
-            return redirect()->to(site_url('/'));
-            }            
-            else{
-                return redirect()->to(site_url('contact'));
-            }
+            if (current_url ()== site_url('contact')){
+                return redirect()->to(site_url('/'));
+            }   
+        }            
+           
     }
 
     //--------------------------------------------------------------------

@@ -12,5 +12,5 @@ $routes->post('login', '\App\Controllers\AuthController::login'); //kirim data k
 $routes->get('logout', '\App\Controllers\AuthController::logout');
 
 $routes->get('/produk', 'ProduksiController::index', ['filter' => 'auth']); //mengakses rute ini harus login dulu
-$routes->get('/keranjang', 'TransaksiController::index', ['filter'=>'auth']); //mengakses rute ini harus login dulu
-$routes->get('contact', '\App\Controllerss\Home::contact', ['filter' => 'role']); //mengakses rute ini harus login dulu
+$routes->get('/keranjang', 'TutransaksiController::index', ['filter'=>'auth']); //mengakses rute ini harus login dulu
+$routes->get('contact', 'Home::contact', ['filter' => 'role']); //mengakses rute ini harus login dulu
