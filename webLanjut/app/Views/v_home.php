@@ -1,6 +1,7 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 <!-- Table with stripped rows -->
+<!-- <?php d($products)?> = $data['product'] -->
 <div class="row">
     <?php foreach ($products as $key => $item) : ?>         
             <div class="col-lg-6">

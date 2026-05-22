@@ -4,21 +4,24 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\UserModel;
 
 class AuthController extends BaseController
 {
+    protected $userModel;
+
    function __construct(){
-    helper('form');
+        helper('form');
+        $this->userModel = new UserModel();
    }
    public function login(){
     if ($this->request->getPost()) {
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
-
-        $dataUser = ['username' => 'wilma', 'password' => '202cb962ac59075b964b07152d234b70', 'role' => 'guest']; // passw 123
-
-        if ($username == $dataUser['username']) {
-            if (md5($password) == $dataUser['password']) {
+         $dataUser = $this->userModel -> where(['username' => $username])->first();
+        if ($dataUser) { 
+        //jika data user ditemukan maka dilanjutakan pengecekan password menggunakan fungsi passowrd_verify
+            if (password_verify($password, $dataUser['password'])) {
                 session()->set([
                     'username' => $dataUser['username'],
                     'role' => $dataUser['role'],

@@ -17,7 +17,6 @@ class ProductModel extends Model
 
     protected bool $allowEmptyInserts = false;  //status insert data kosong boleh/tidak
     protected bool $updateOnlyChanged = true;  //status hanya field yang berubah yang diupdate
-
     protected array $casts = []; //daftar untuk mengubah tipe data otomatis
     protected array $castHandlers = []; //daftar custom handler untuk cast tipe khusus
 

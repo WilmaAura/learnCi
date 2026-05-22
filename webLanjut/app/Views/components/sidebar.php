@@ -29,7 +29,7 @@
           <i class="bi bi-receipt"></i>
           <span>Produk</span>
         </a>
-      </li><!-- End Dashboard Nav -->s
+      </li><!-- End Dashboard Nav -->
       <?php
       }
       ?>

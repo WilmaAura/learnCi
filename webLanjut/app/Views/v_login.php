@@ -4,13 +4,18 @@
 $username = [
     'name' => 'username',
     'id' => 'username',
-    'class' => 'form-control'
+    'class' => 'form-control',
+    'required' => 'required',
+    'minlength' => '6'
 ];
-
+//Validation on the client
 $password = [
     'name' => 'password',
     'id' => 'password',
-    'class' => 'form-control'
+    'class' => 'form-control',
+    'required' => 'required',
+    'minlength' => '7',
+    'inputmode' => 'numeric'  
 ];
 ?>
 <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
