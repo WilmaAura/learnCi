@@ -16,11 +16,19 @@ class AuthController extends BaseController
    }
    public function login(){
     if ($this->request->getPost()) {
+        $rules = [
+            'username' => 'required|min_length[6]',
+            'password' => 'required|min_length[7]',
+
+        ];    
+
+    if ($this->validate($rules)){
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
-         $dataUser = $this->userModel -> where(['username' => $username])->first();
+
+        $dataUser = $this->userModel->where(['username' => $username])->first();
         if ($dataUser) { 
-        //jika data user ditemukan maka dilanjutakan pengecekan password menggunakan fungsi passowrd_verify
+            //jika data user ditemukan maka dilanjutakan pengecekan password menggunakan fungsi passowrd_verify
             if (password_verify($password, $dataUser['password'])) {
                 session()->set([
                     'username' => $dataUser['username'],
@@ -32,10 +40,15 @@ class AuthController extends BaseController
                 session()->setFlashdata('failed', 'Username & Password Salah');
                 return redirect()->back();
             }
-        } else {
-            session()->setFlashdata('failed', 'Username Tidak Ditemukan');
-            return redirect()->back();
+            } else {
+                session()->setFlashdata('failed', 'Username Tidak Ditemukan');
+                return redirect()->back();
+            }
+        } else{
+            session()->setFlashdata('failed', $this->validator->listErrors());
+            return redirect() -> back();
         }
+    
     } else {
         return view('v_login');
     }
