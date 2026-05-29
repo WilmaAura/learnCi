@@ -11,13 +11,17 @@ $routes->get('login', '\App\Controllers\AuthController::login'); //ambil data
 $routes->post('login', '\App\Controllers\AuthController::login'); //kirim data ke server 
 $routes->get('logout', '\App\Controllers\AuthController::logout');
 
-$routes->get('produk', 'ProduksiController::index', ['filter' => 'auth']); //mengakses rute ini harus login dulu
 $routes->get('keranjang', 'TransaksiController::index', ['filter'=>'auth']); //mengakses rute ini harus login dulu
 $routes->get('contact', 'Home::contact', ['filter' => 'role']); //mengakses rute ini harus login dulu
 
 
 /* Routes CRUD */
-$routes->post('produk', 'ProdukController::create', ['filter' => 'auth']);
-$routes->post('produk/edit/(:any)', 'ProdukController::edit/$1', ['filter' => 'auth']);
-$routes->post('produk/delete/(:any)', 'ProdukController::delete/$1', ['filter' => 'auth']);
+/* Routes for product */
+$routes->group('produk', ['filter' => 'auth'], function($routes){
+    $routes->get('', 'ProdukController::index'); //mengakses rute ini harus login dulu
+    $routes->post('', 'ProdukController::create');
+    //(:any) = placeholder untuk menambahkan parameter yang digunakan oleh function pada controller yang bertanggung jawab atas route ini
+    $routes->post('edit/(:any)', 'ProdukController::edit/$1'); 
+    $routes->get('delete/(:any)', 'ProdukController::delete/$1');
+});
 
