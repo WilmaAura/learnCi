@@ -17,7 +17,7 @@
       </li><!-- End Dashboard Nav -->
       <li class="nav-item">
          <a class="nav-link <?php echo (uri_string() == 'contact') ? "" : "collapsed" ?>" href="contact">
-          <i class="bi bi-receipt"></i>
+          <i class="bi bi-envelope"></i>
           <span>Contact</span>
         </a>
       </li><!-- End Dashboard Nav -->
