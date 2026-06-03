@@ -10,11 +10,19 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index'); //mengakses rute ini harus login dulu
 
+
+$routes->group('keranjang', ['filter' => 'auth'], function ($routes){ //mengakses rute ini harus login dulu
+    $routes->get('', 'TransaksiController::index'); 
+    $routes->post('', 'TransaksiController::cart_add');
+    $routes->post('edit', 'TransaksiController::cart_edit');
+    $routes->get('delete/(:any)', 'TransaksiController::cart_delete/$1');
+    $routes->post('', 'TransaksiController::cart_add');
+});
+
 $routes->get('login', '\App\Controllers\AuthController::login'); //ambil data
 $routes->post('login', '\App\Controllers\AuthController::login'); //kirim data ke server 
 $routes->get('logout', '\App\Controllers\AuthController::logout');
 
-$routes->get('keranjang', 'TransaksiController::index', ['filter'=>'auth']); //mengakses rute ini harus login dulu
 $routes->get('contact', 'Home::contact', ['filter' => 'role']); //mengakses rute ini harus login dulu
 
 
