@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controllers;
-
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
@@ -9,7 +8,6 @@ use App\Models\UserModel;
 class AuthController extends BaseController
 {
     protected $userModel;
-
    function __construct(){
         helper('form');
         $this->userModel = new UserModel();
@@ -19,13 +17,10 @@ class AuthController extends BaseController
         $rules = [
             'username' => 'required|min_length[6]',
             'password' => 'required|min_length[7]',
-
         ];    
-
     if ($this->validate($rules)){
         $username = $this->request->getVar('username');
         $password = $this->request->getVar('password');
-
         $dataUser = $this->userModel->where(['username' => $username])->first();
         if ($dataUser) { 
             //jika data user ditemukan maka dilanjutakan pengecekan password menggunakan fungsi passowrd_verify
