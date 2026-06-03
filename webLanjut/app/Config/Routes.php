@@ -1,5 +1,8 @@
 <?php
-
+/* 
+post = Mengirim data baru ke server (seperti input form)
+get = Mengambil/meminta data dari server 
+*/
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -23,5 +26,6 @@ $routes->group('produk', ['filter' => 'auth'], function($routes){
     //(:any) = placeholder untuk menambahkan parameter yang digunakan oleh function pada controller yang bertanggung jawab atas route ini
     $routes->post('edit/(:any)', 'ProdukController::edit/$1'); 
     $routes->get('delete/(:any)', 'ProdukController::delete/$1');
+    $routes->get ('download', 'ProdukController::download');
 });
 
