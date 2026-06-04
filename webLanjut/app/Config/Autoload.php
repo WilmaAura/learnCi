@@ -37,8 +37,10 @@ class Autoload extends AutoloadConfig
      *
      * @var array<string, list<string>|string>
      */
+    // Konfigurasi naemspace agar bisa menggunakan class cart dengan ringkas
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
+        'CodeIgniterCart' => ROOTPATH . 'vendor/jason-napolitano/codeigniter4-cart-module/src'
     ];
 
     /**
