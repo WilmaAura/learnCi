@@ -32,7 +32,27 @@ class TransaksiController extends BaseController
         ]); 
         session()->setFlashdata(
             'success',
-            
+	        'Produk berhasil ditambahkan ke keranjang. 
+	        <a href="' . base_url('keranjang') . '">Lihat</a>'
         );
+        return redirect()->to(base_url('/'));
     }
+
+    public function cart_edit(){
+        $i = 1;
+        foreach ($this->cart->contents() as $item){
+            $qty = $this->request->getPost('qty', $i++);
+
+            $this->cart->update([
+                'rowid' => $item['rowid'],
+                'qty' => $qty
+            ]);
+        }
+        session()->setFlashdata(
+            'success',
+            'keranjang berhasil diperbarui'
+        );
+        return redirect()->TO(base_url('keranjang'));
+    }
+
 }
