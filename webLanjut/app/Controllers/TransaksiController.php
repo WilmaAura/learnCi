@@ -55,4 +55,13 @@ class TransaksiController extends BaseController
         return redirect()->TO(base_url('keranjang'));
     }
 
+    public function cart_delete ($rowid){
+        $this->cart->remove($rowid);
+        session()->setFlashdata(
+            'success',
+            'Produk berhasil dihapus dari keranjang'
+        );
+        return redirect()->to(base_url('keranjang'));
+    }
+
 }
