@@ -15,7 +15,8 @@ class TransaksiController extends BaseController
     public function index()
     {
         $data = [
-            'items' => $this->cart->contents()
+            'items' => $this->cart->contents(),
+            'total' => $this->cart->total()
         ];
         return view('v_keranjang', $data);
     }
@@ -64,4 +65,15 @@ class TransaksiController extends BaseController
         return redirect()->to(base_url('keranjang'));
     }
 
+    public function cart_clear(){
+        $this->cart->destroy();
+
+        session()->setFlashdata(
+            'sucess',
+            'Keranjang berhasil dikosongkan'
+        );
+        return redirect()->to(base_url('keranjang'));
+    }
+
+    
 }
