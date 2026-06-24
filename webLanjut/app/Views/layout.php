@@ -107,13 +107,11 @@ if(uri_string()!=""){
   <script src="<?= base_url()?>NiceAdmin/assets/vendor/tinymce/tinymce.min.js"></script>
   <script src="<?= base_url()?>NiceAdmin/assets/vendor/php-email-form/validate.js"></script>
 
-  <!-- section untuk render script yang dibuat pada file-file 
-   view yang menggunkana (extend) layout.php -->
+  <!-- section untuk render script yang dibuat pada file-file view yang menggu nkana (extend) layout.php -->
   <?= $this->renderSection('script') ?> 
 
   <!-- Template Main JS File -->
   <script src="<?= base_url()?>NiceAdmin/assets/js/main.js"></script>
 
 </body>
-
 </html>
