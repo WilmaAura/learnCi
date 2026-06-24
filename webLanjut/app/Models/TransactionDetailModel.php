@@ -12,7 +12,7 @@ class TransactionDetailModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['transaction_id', 'product_id', 'jumlah', 'diskon', 'subtotal_harga'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
