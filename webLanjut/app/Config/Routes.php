@@ -37,3 +37,8 @@ $routes->group('produk', ['filter' => 'auth'], function($routes){
     $routes->get ('download', 'ProdukController::download');
 });
 
+$routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
+$routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
+
+$routes->get('ajax/destinations','TransaksiController::destinations', ['filter' => 'auth']);
+$routes->get('ajax/costs','TransaksiController::costs', ['filter' => 'auth']);
