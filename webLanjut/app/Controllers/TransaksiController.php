@@ -137,4 +137,61 @@ class TransaksiController extends BaseController
 
         return $this->response->setJSON($results);
         }
+    
+ 
+   public function buy()
+    { 
+    $cartItems = $this->cart->contents();
+
+    if (empty($cartItems)) {
+        return redirect()->back();
+    }
+
+    $db = \Config\Database::connect();
+    $db->transStart(); 
+
+    $subtotal = 0;
+    foreach ($cartItems as $item) {
+        $subtotal += $item['qty'] * $item['price'];
+    }
+
+    $ongkir = (int) $this->request->getPost('ongkir');
+
+    $transaction = [
+        'username'    => $this->request->getPost('username'),
+        'alamat'      => $this->request->getPost('alamat'),
+        'ongkir'      => $ongkir,
+        'total_harga' => $subtotal + $ongkir,
+        'status'      => 0, 
+    ];
+
+    // insert transaction
+    if (!$this->transactionModel->insert($transaction)) {
+        $db->transRollback();
+        return redirect()->back()->with('error', 'Gagal membuat transaksi');
+    }
+
+    $transactionId = $this->transactionModel->getInsertID();
+
+    // insert transaction detail
+    foreach ($cartItems as $item) {
+        $this->transactionDetailModel->insert([
+            'transaction_id' => $transactionId,
+            'product_id'     => $item['id'],
+            'jumlah'         => $item['qty'],
+            'diskon'         => 0,
+            'subtotal_harga' => $item['qty'] * $item['price'] 
+        ]);
+    }
+
+    $db->transComplete();
+
+    if (!$db->transStatus()) {
+        return redirect()->back()->with('error', 'Gagal membuat transaksi');
+    }
+
+		//hapus session keranjang belanja 
+    $this->cart->destroy();
+    return redirect()->to(base_url());
+    }
 }
