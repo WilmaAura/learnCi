@@ -22,8 +22,6 @@ class DiscountSeeder extends Seeder
                 'deleted_at' => null,
             ];
         }
-
-        // Langsung panggil lewat $this->db tanpa bikin variabel builder
         $this->db->table('discounts')->insertBatch($data);
     }
 }

@@ -6,8 +6,7 @@
         <?= form_open('buy', 'class="row g-3"') ?>
 
 <?= form_hidden('username', session()->get('username')) ?>
-<?= form_hidden('total_harga', '') ?>
-
+<input type="hidden" name="total_harga" id="total_harga" value="">
 <div class="col-12">
     <?= form_label('Nama', 'nama', ['class' => 'form-label']) ?>
     <?= form_input([
@@ -26,11 +25,9 @@
 </div> 
 <div class="col-12"> 
     <?= form_label('Kelurahan', 'kelurahan', ['class' => 'form-label']) ?>
-    <!-- Inputan form_dropdown untuk pilihan daerah tujuan pengiriman -->
     <?= form_dropdown('kelurahan', [], '', ['id' => 'kelurahan', 'class' => 'form-control']) ?></div>
 <div class="col-12"> 
     <?= form_label('Layanan', 'layanan', ['class' => 'form-label']) ?> 
-    <!-- Inputan form dropdown untuk pilihan layanan  -->
     <?= form_dropdown('layanan', [], '', ['id' => 'layanan', 'class' => 'form-control']) ?>
 </div>
 <div class="col-12">
@@ -64,10 +61,21 @@
       <?php 
       if (!empty($items)) :
           foreach ($items as $index => $item) :
+              // Hitung balik harga asli untuk kebutuhan harga coret
+              $hargaAsli = $item['price'] + ($nominal_diskon ?? 0);
       ?>
               <tr>
                   <td><?= $item['name'] ?></td>
-                  <td><?= number_to_currency($item['price'], 'IDR') ?></td>
+                  <td>
+                      <?php if (isset($nominal_diskon) && $nominal_diskon > 0) : ?>
+                          <span style="text-decoration: line-through; color: #dc3545; font-size: 0.85em; display: block;">
+                              <?= number_to_currency($hargaAsli, 'IDR') ?>
+                          </span>
+                      <?php endif; ?>
+                      <span>
+                          <?= number_to_currency($item['price'], 'IDR') ?>
+                      </span>
+                  </td>
                   <td><?= $item['qty'] ?></td>
                   <td><?= number_to_currency($item['price'] * $item['qty'], 'IDR') ?></td>
               </tr>
@@ -83,7 +91,7 @@
       <tr>
           <td colspan="2"></td>
           <td>Total</td>
-          <td><span id="total"><?= number_to_currency($total, 'IDR') ?></span></td>
+          <td><span id="total" style="font-weight: bold; color: #0d6efd;"><?= number_to_currency($total, 'IDR') ?></span></td>
       </tr>
   </tbody>
 </table>
@@ -91,11 +99,10 @@
 </div>
 </div>
 <?=$this->endSection() ?>
-<!-- tampilan   inputan menggunakan plugin select2-->
+
 <?= $this->section('script') ?>
 <script>
 $(document).ready(function() {
-    /* untuk menyimpan nilai ongkir dan subtotal, serta fungsi yang digunakan utnuk menghitung nilai total */
     let ongkir = 0;
     let subtotal = <?= $total ?>;
     hitungTotal();
@@ -104,16 +111,18 @@ $(document).ready(function() {
         let total = subtotal + ongkir;
 
         $("#ongkir").val(ongkir);
+        // Mengubah teks total agar format IDR-nya rapi menggunakan toLocaleString
         $("#total").text(`IDR ${total.toLocaleString('id-ID')}`);
         $("#total_harga").val(total);
     }
-	$('#kelurahan').select2({
-	    placeholder: 'Cari daerah tujuan',
-	    minimumInputLength: 3, 
+    
+    $('#kelurahan').select2({
+        placeholder: 'Cari daerah tujuan',
+        minimumInputLength: 3, 
         ajax: {
-            url: '<?= site_url('ajax/destinations') ?>', //Keyword dikettikan user akan dikirim ke URL
+            url: '<?= site_url('ajax/destinations') ?>',
             dataType: 'json',
-            delay: 300, //Beri delay 300ms (detik) artinya artinya tunggu user berhenti mengetik sebelum mengirim request
+            delay: 300,
             data: function(params) {
                 return {
                     q: params.term
@@ -123,15 +132,15 @@ $(document).ready(function() {
                 return data;
             },
             cache: true
-}
-	});
+        }
+    });
+    
     $("#kelurahan").on('change', function(){
         let id_kelurahan = $(this).val();
         $("#layanan").empty();
         ongkir = 0;
         hitungTotal();
 
-        /* AJAX untuk mengirimkan data destination dan mendapat responsenya */
         $.ajax({
             url: "<?= site_url('ajax/costs') ?>", 
             dataType: "json",
@@ -139,6 +148,8 @@ $(document).ready(function() {
                 destination: id_kelurahan
             },
             success: function (data) { 
+                // Set default/placeholder option pada layanan
+                $("#layanan").append('<option value="0">-- Pilih Layanan Pengiriman --</option>');
                 data.forEach(function (item) {
                     $("#layanan").append(
                         $('<option>', {
@@ -150,10 +161,11 @@ $(document).ready(function() {
             }
         });
     });
+    
     $("#layanan").on('change', function() {
-    ongkir = parseInt($(this).val());
-    hitungTotal();
-}); 
+        ongkir = parseInt($(this).val()) || 0;
+        hitungTotal();
+    }); 
 });
 </script>
 <?= $this->endSection() ?>

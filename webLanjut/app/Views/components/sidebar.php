@@ -16,6 +16,11 @@
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item">
+        <a class="nav-link <?php echo (uri_string() == 'checkout') ? "" : "collapsed" ?>" href="checkout">
+          <i class="bi bi-credit-card"></i> <span>Checkout</span>
+        </a>
+      </li>
+      <li class="nav-item">
          <a class="nav-link <?php echo (uri_string() == 'contact') ? "" : "collapsed" ?>" href="contact">
           <i class="bi bi-envelope"></i>
           <span>Contact</span>
@@ -30,9 +35,20 @@
           <span>Produk</span>
         </a>
       </li><!-- End Dashboard Nav -->
+      <li class="nav-item">
+           <a class="nav-link <?php echo (uri_string() == 'diskon' || uri_string() == 'discount') ? "" : "collapsed" ?>" href="diskon">
+            <i class="bi bi-percent"></i> <span>Diskon</span>
+          </a>
+        </li>
+        <li class="nav-item">
+             <a class="nav-link <?php echo (uri_string() == 'pembelian') ? "" : "collapsed" ?>" href="pembelian">
+              <i class="bi bi-bag-check"></i> <span>Pembelian</span>
+            </a>
+        </li>
       <?php
       }
       ?>
+    
       <li class="nav-item">
         <a class="nav-link <?php echo (uri_string() == 'history') ? "" : "collapsed" ?>" href="history">
             <i class="bi bi-person"></i>

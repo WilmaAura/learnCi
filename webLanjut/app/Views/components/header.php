@@ -14,7 +14,15 @@
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
-    </div><!-- End Search Bar -->
+    </div><?php if (isset($nominal_diskon) && $nominal_diskon > 0) : ?>
+      <div class="ms-3 d-flex align-items-center">
+        <span class="badge bg-success text-white px-3 py-2 rounded" style="font-size: 13px; font-weight: 500; background-color: #198754 !important;">
+          Hari ini ada diskon <?= number_to_currency($nominal_diskon, 'IDR') ?> per item
+        </span>
+      </div>
+    <?php endif; ?>
+    
+    <!-- End Search Bar -->
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">

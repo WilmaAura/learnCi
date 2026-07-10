@@ -5,12 +5,16 @@ if (session()->getFlashData('success')){
 ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <?=session()->getFlashData('success') ?>
-        <button type="buttong" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close"></button>
     </div>
 <?php
 }
 ?>
-<table class="table datable">
+
+<!-- Pastikan pembuka form sudah ada jika kamu menggunakan fitur Perbarui Keranjang -->
+<?= form_open('keranjang/edit') ?>
+
+<table class="table datatable">
     <thead>
         <tr>
             <th scope="col">Nama</th>
@@ -26,12 +30,29 @@ if (session()->getFlashData('success')){
         $i = 1;
         if (!empty($items)) :
             foreach ($items as $index => $item):
+                // Hitung balik harga asli sebelum diskon untuk kebutuhan harga coret
+                // Karena $item['price'] sudah harga diskon, maka harga asli = harga diskon + nominal diskon
+                $hargaAsli = $item['price'] + ($nominal_diskon ?? 0);
         ?>
             <tr>
                 <td> <?=$item['name'] ?></td>
                 <td><img src="<?= base_url() . "img/" . $item['options']['foto'] ?>" width="100px"></td>
-                <td><?= number_to_currency($item['price'], 'IDR') ?></td>
-                <td><input type="number" min="1" name="qty<?= $i++ ?>" class="form-control" value="<?= $item['qty'] ?>"></td>
+                <td>
+                    <?php if (isset($nominal_diskon) && $nominal_diskon > 0) : ?>
+                        <!-- Menampilkan harga asli dicoret warna merah -->
+                        <span style="text-decoration: line-through; color: #dc3545; font-size: 0.9em; display: block;">
+                            <?= number_to_currency($hargaAsli, 'IDR') ?>
+                        </span>
+                    <?php endif; ?>
+                    <!-- Menampilkan harga diskon (harga aktif) -->
+                    <span style="color: #000;">
+                        <?= number_to_currency($item['price'], 'IDR') ?>
+                    </span>
+                </td>
+                <td>
+                    <!-- input qty menggunakan array bawaan cart -->
+                    <input type="number" min="1" name="qty<?= $i++ ?>" class="form-control" value="<?= $item['qty'] ?>" style="width: 80px;">
+                </td>
                 <td><?= number_to_currency($item['subtotal'], 'IDR') ?></td>
                 <td>
                     <!-- Button hapus keranjang -->
@@ -54,5 +75,6 @@ if (session()->getFlashData('success')){
 <?php if (!empty($items)) :?>
     <a class="btn btn-success" href="<?php echo base_url() ?>checkout">Selesai Belanja</a>
 <?php endif; ?>
+
 <?= form_close() ?>
 <?= $this->endSection() ?>

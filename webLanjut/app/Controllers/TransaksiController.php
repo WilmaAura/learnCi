@@ -24,9 +24,15 @@ class TransaksiController extends BaseController
 
     public function index()
     {
+        // Ambil data diskon hari ini dari database
+        $db = \Config\Database::connect();
+        $hariIni = date('Y-m-d');
+        $diskon = $db->table('discounts')->where('tanggal', $hariIni)->get()->getRowArray();
+
         $data = [
-            'items' => $this->cart->contents(),
-            'total' => $this->cart->total()
+            'items'          => $this->cart->contents(),
+            'total'          => $this->cart->total(),
+            'nominal_diskon' => $diskon ? $diskon['nominal'] : 0 // Ditambahkan ini
         ];
         return view('v_keranjang', $data);
     }
@@ -86,9 +92,15 @@ class TransaksiController extends BaseController
     }
 
     public function checkout(){
+      // Ambil data diskon hari ini dari database
+        $db = \Config\Database::connect();
+        $hariIni = date('Y-m-d');
+        $diskon = $db->table('discounts')->where('tanggal', $hariIni)->get()->getRowArray();
+
         $data = [
-            'items' => $this->cart->contents(),
-            'total' => $this->cart->total()
+            'items'          => $this->cart->contents(),
+            'total'          => $this->cart->total(),
+            'nominal_diskon' => $diskon ? $diskon['nominal'] : 0 // Ditambahkan ini
         ];
 
         return view('v_checkout', $data);

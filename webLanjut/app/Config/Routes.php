@@ -43,6 +43,22 @@ $routes->get('history', 'TransaksiController::history', ['filter' => 'auth']);
 
 $routes->get('ajax/destinations','TransaksiController::destinations', ['filter' => 'auth']);
 $routes->get('ajax/costs','TransaksiController::costs', ['filter' => 'auth']);
-$routes->resource('api/products', ['controller' => 'Api\ProdukController']);
 
 $routes->get('api/transactions', 'Api\TransaksiController::index');
+
+$routes->group('diskon', ['filter' => 'auth'], function($routes){
+    $routes->get('', 'DiscountController::index');
+    $routes->post('', 'DiscountController::create'); 
+    $routes->post('edit/(:any)', 'DiscountController::update/$1'); // Arahkan ke update
+    $routes->get('delete/(:any)', 'DiscountController::delete/$1');
+});
+
+/* Routes for Pembelian (Admin Management) */
+$routes->group('pembelian', ['filter' => 'auth'], function($routes){
+    $routes->get('', 'PembelianController::index');
+    $routes->get('status/(:num)', 'PembelianController::ubahStatus/$1');
+});
+
+//Api
+$routes->resource('api/products', ['controller' => 'Api\ProdukController']);
+$routes->resource('api/discounts', ['controller' => 'Api\DiscountController']);
